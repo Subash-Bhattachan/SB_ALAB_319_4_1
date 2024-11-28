@@ -91,9 +91,7 @@ router.get("/stats", async (req, res) => {
 
 });
 
-  // I used $facet then 2 $project stages after the replicatation of the previous aggregation
-
-
+ 
   router.get("/stats/:id", async (req, res) => {
 
     const { id } = req.params; // to extract class_id 
