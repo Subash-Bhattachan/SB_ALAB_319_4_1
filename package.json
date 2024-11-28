@@ -1,0 +1,23 @@
+{
+  "name": "sb_alab_319_4_1",
+  "version": "1.0.0",
+  "description": "This is a Node.js project.",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-async-errors": "^3.1.1",
+    "mongodb": "^6.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
