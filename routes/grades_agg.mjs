@@ -180,6 +180,88 @@ router.get("/stats", async (req, res) => {
 
 
 
+async function createIndexes() {
+
+  let collection = await db.collection("grades"); 
+// Create a single-field index on class_id
+await collection.createIndex({ class_id: 1 });
+
+// Create a single-field index on learner_id
+await collection.createIndex({ learner_id: 1 });
+
+// Create a compound index on learner_id and class_id (here both are ascending)
+await collection.createIndex({ learner_id: 1, class_id: 1 });
+
+}
+
+createIndexes();
+
+
+
+// db.createCollection("grades", {
+//   validator: {
+//      $jsonSchema: {
+//         bsonType: "object",
+//         title: "Grade Object Validation",
+//         required: [ "class_id", "learner_id" ],
+//         properties: {
+          
+//            class_id: {
+//               bsonType: "int",
+//               minimum: 0,
+//               maximum: 300,
+//               description: "'class_id' must be an integer in [ 0, 300 ] and is required"
+//            },
+//            learner_id: {
+//               bsonType: "int",
+//               minimum: 0,
+//               description: "'learner_id' must be a integer greater than or equal to 0"
+//            }
+//         }
+//      }
+//   },
+//   validationAction: "warn"
+// } );
+
+
+// the above code is not working 
+// as we already have the grades collection so we want to just add the validation rules, 
+// we will use the following method to modify the grades collection
+
+async function updateValidationRules() {
+
+    //  the collMod command is used here to update the validation rules
+    const result = 
+    await db.command({
+      collMod: "grades",
+      validator: {
+         $jsonSchema: {
+            bsonType: "object",
+            title: "Grade Object Validation",
+            required: [ "class_id", "learner_id" ],
+            properties: {
+              
+               class_id: {
+                  bsonType: "int",
+                  minimum: 0,
+                  maximum: 300,
+                  description: "'class_id' must be an integer in [ 0, 300 ] and is required"
+               },
+               learner_id: {
+                  bsonType: "int",
+                  minimum: 0,
+                  description: "'learner_id' must be a integer greater than or equal to 0"
+               }
+            }
+         }
+      },
+      validationAction: "warn"
+    });
+    
+};
+
+updateValidationRules();
+// the above function was tested in the mongoshell accrodingly and it is working 
 
 
 // Get the weighted average of a specified learner's grades, per class
