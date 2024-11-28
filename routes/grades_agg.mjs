@@ -98,12 +98,15 @@ router.get("/stats", async (req, res) => {
 
     const { id } = req.params; // to extract class_id 
 
+    // to make sure id is a number 
+    const classId = parseInt(id);
+
     let collection = await db.collection("grades");
   
     let result = await collection
       .aggregate([
         {
-          $match: { class_id: id } 
+          $match: { class_id: classId } 
         },
         {
           $unwind: { path: "$scores" },
@@ -161,7 +164,11 @@ router.get("/stats", async (req, res) => {
       ])
       .toArray();
       console.log(result);
-      const totalLearners = (await collection.distinct("learner_id", { class_id: id })).length;
+      console.log("Class ID:", id);
+      
+
+
+      const totalLearners = (await collection.distinct("learner_id", { class_id: classId })).length;
       const learnersWithOver70 = result.length;
       const percentageover70 = ((learnersWithOver70 / totalLearners) * 100).toFixed(2);
     
